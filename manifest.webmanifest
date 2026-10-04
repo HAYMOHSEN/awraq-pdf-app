@@ -1,7 +1,7 @@
 {
   "id": "./",
   "name": "Awraq PDF – Arabic & English PDF Tools",
-  "short_name": "Awraq PDF",
+  "short_name": "Awraq PDF – Arabic & English PDF Tools",
   "description": "Merge, split, compress and convert PDFs on your PC, with Arabic done right. Files never leave your device.",
   "lang": "en",
   "dir": "auto",
@@ -11,22 +11,62 @@
   "background_color": "#E6EAF1",
   "theme_color": "#16213D",
   "orientation": "any",
-  "categories": ["productivity", "utilities", "business"],
+  "categories": [
+    "productivity",
+    "utilities",
+    "business"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-1024.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" },
-    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "file_handlers": [
     {
       "action": "./",
-      "accept": { "application/pdf": [".pdf"] },
+      "accept": {
+        "application/pdf": [
+          ".pdf"
+        ]
+      },
       "launch_type": "single-client"
     }
   ],
   "screenshots": [
-    { "src": "screenshots/en-1-home.png", "sizes": "1600x900", "type": "image/png", "form_factor": "wide", "label": "Drop a PDF and pick a tool" },
-    { "src": "screenshots/en-2-merge.png", "sizes": "1600x900", "type": "image/png", "form_factor": "wide", "label": "Merge PDFs in the order you choose" }
+    {
+      "src": "screenshots/en-1-home.png",
+      "sizes": "1600x900",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Drop a PDF and pick a tool"
+    },
+    {
+      "src": "screenshots/en-2-merge.png",
+      "sizes": "1600x900",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Merge PDFs in the order you choose"
+    }
   ]
 }
