@@ -3,7 +3,7 @@
 
 export const PRO_SKU = 'awraq_pro';
 // Fill in after reserving the app name in Partner Center (e.g. '9NXXXXXXXXXX').
-export const STORE_PRODUCT_ID = '';
+export const STORE_PRODUCT_ID = '9NXSK845KC49';
 
 const BILLING = 'https://store.microsoft.com/billing';
 const CACHE_KEY = 'awraq.pro.v1';
