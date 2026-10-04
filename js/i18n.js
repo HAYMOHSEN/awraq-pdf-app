@@ -37,7 +37,7 @@ const STR = {
     'tool.pdf2word': 'PDF to Word',
     'tool.pdf2word.desc': 'Get an editable Word file with Arabic text in the right order.',
     'tool.ocr': 'OCR for scans',
-    'tool.ocr.desc': 'Pull editable Arabic and English text out of scans and photos.',
+    'tool.ocr.desc': 'Pull editable Arabic and English text out of scans and photos, or make the scan searchable.',
 
     'home.title': 'What would you like to do?',
     'home.drop': 'Drop a PDF or images to begin',
@@ -86,6 +86,7 @@ const STR = {
     'act.ocr': 'Recognize text',
     'act.ocrWord': 'Save as Word',
     'act.ocrTxt': 'Save as text',
+    'act.ocrPdf': 'Save as searchable PDF',
 
     'status.working': 'Working…',
     'status.reading': 'Reading {name}…',
@@ -209,6 +210,7 @@ const STR = {
     'ocr.result': 'Recognized text',
     'ocr.editHint': 'Check the text and fix anything before saving.',
     'ocr.offline': 'OCR needs the internet the first time, to download its language data. Connect and try again.',
+    'ocr.pdfHint': 'Searchable PDF keeps the original pages exactly as they are and adds an invisible text layer you can search, select and copy. Edits made in the box above go into the Word and text files only.',
 
     'pro.trial': 'Free preview: the first {count}. Get Pro to process all {total}.',
     'pro.title': 'Awraq Pro',
@@ -280,7 +282,7 @@ const STR = {
     'tool.pdf2word': 'PDF إلى Word',
     'tool.pdf2word.desc': 'احصل على ملف Word قابل للتعديل مع ترتيب صحيح للنص العربي.',
     'tool.ocr': 'التعرّف على النص (OCR)',
-    'tool.ocr.desc': 'استخرج نصًا عربيًا وإنجليزيًا قابلًا للتعديل من الصور والملفات الممسوحة.',
+    'tool.ocr.desc': 'استخرج نصًا عربيًا وإنجليزيًا قابلًا للتعديل من الصور والملفات الممسوحة، أو اجعل المسح قابلًا للبحث.',
 
     'home.title': 'ماذا تريد أن تفعل؟',
     'home.drop': 'أفلت ملف PDF أو صورًا للبدء',
@@ -329,6 +331,7 @@ const STR = {
     'act.ocr': 'استخراج النص',
     'act.ocrWord': 'حفظ كملف Word',
     'act.ocrTxt': 'حفظ كنص',
+    'act.ocrPdf': 'حفظ كـ PDF قابل للبحث',
 
     'status.working': 'جارٍ العمل…',
     'status.reading': 'جارٍ قراءة {name}…',
@@ -452,6 +455,7 @@ const STR = {
     'ocr.result': 'النص المستخرج',
     'ocr.editHint': 'راجع النص وصحّح ما يلزم قبل الحفظ.',
     'ocr.offline': 'يحتاج OCR إلى الإنترنت في المرة الأولى لتنزيل بيانات اللغة. اتصل بالإنترنت ثم حاول مجددًا.',
+    'ocr.pdfHint': 'يحتفظ ملف PDF القابل للبحث بالصفحات الأصلية كما هي تمامًا ويضيف طبقة نص غير مرئية يمكنك البحث فيها وتحديدها ونسخها. أما التعديلات في المربع أعلاه فتُطبّق على ملفي Word والنص فقط.',
 
     'pro.trial': 'معاينة مجانية: أول {count}. احصل على Pro لمعالجة الكل ({total}).',
     'pro.title': 'أوراق Pro',

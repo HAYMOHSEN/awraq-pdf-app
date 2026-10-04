@@ -5,6 +5,7 @@ import { renderPage, lazyThumb } from './pdfjs.js';
 import { ICONS, icon, toolHeader, dropzone, notice, actionBar, resultCard, selectField, checkField, optionsPanel, toast } from './ui.js';
 import { userMessage, loadPdf, disposeEntry, fileHeader, deliver, saveAgain } from './docs.js';
 import { extractPages, buildDocx, buildText, paragraphsFromPlainText } from './arabic.js';
+import { buildSearchablePdf, linesFromOcr } from './searchable.js';
 
 const ARABIC_FONTS = ['Arial', 'Sakkal Majalla', 'Traditional Arabic', 'Simplified Arabic', 'Tahoma', 'Segoe UI'];
 const TESSERACT_URL = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
@@ -156,7 +157,7 @@ async function runPdf2word(st, ctx, bar, format) {
    ========================================================= */
 export const ocr = {
   id: 'ocr', group: 'arabic', accept: 'any', multiple: true, pro: true,
-  init: () => ({ pdf: null, images: [], lang: 'ara+eng', text: '', keepLines: false, font: 'Arial', error: null, result: null, output: null, loading: null }),
+  init: () => ({ pdf: null, images: [], lang: 'ara+eng', text: '', ocrPages: [], keepLines: false, font: 'Arial', error: null, result: null, output: null, loading: null }),
   async addFiles(st, files, ctx) {
     st.error = null; st.result = null; st.output = null;
     const pdfFile = files.find(isPdfFile);
@@ -169,6 +170,7 @@ export const ocr = {
         this.clearImages(st);
         st.pdf = entry;
         st.text = '';
+        st.ocrPages = [];
       } catch (e) { st.error = userMessage(e); }
       st.loading = null;
     } else {
@@ -178,6 +180,7 @@ export const ocr = {
         st.images.push({ name: f.name, file: f, url: URL.createObjectURL(f) });
       }
       st.text = '';
+      st.ocrPages = [];
     }
     ctx.refresh();
   },
@@ -223,8 +226,9 @@ export const ocr = {
       const copyBtn = h('button', { type: 'button', class: 'btn btn-quiet', onclick: async () => {
         try { await navigator.clipboard.writeText(st.text); toast(t('w.copied')); } catch (_) { area.select(); document.execCommand('copy'); toast(t('w.copied')); }
       } }, icon('copy'), t('btn.copy'));
-      const wordBtn = h('button', { type: 'button', class: 'btn btn-primary', onclick: () => saveOcr(st, ctx, 'docx') }, t('act.ocrWord'));
+      const wordBtn = h('button', { type: 'button', class: 'btn btn-quiet', onclick: () => saveOcr(st, ctx, 'docx') }, t('act.ocrWord'));
       const txtBtn = h('button', { type: 'button', class: 'btn btn-quiet', onclick: () => saveOcr(st, ctx, 'txt') }, t('act.ocrTxt'));
+      const pdfBtn = h('button', { type: 'button', class: 'btn btn-primary', onclick: () => saveOcr(st, ctx, 'pdf') }, t('act.ocrPdf'));
       root.append(h('section', { class: 'ocr-result' },
         h('div', { class: 'preview-head' }, h('h2', { class: 'field-label' }, t('ocr.result')), h('p', { class: 'muted' }, t('ocr.editHint'))),
         area,
@@ -232,7 +236,8 @@ export const ocr = {
           h('div', { class: 'ocr-export-opts' },
             checkField({ label: t('w.keepLines'), checked: st.keepLines, onChange: (v) => { st.keepLines = v; st.result = null; } }),
             fontField(st)),
-          h('div', { class: 'action-buttons' }, copyBtn, txtBtn, wordBtn))));
+          h('div', { class: 'action-buttons' }, copyBtn, txtBtn, wordBtn, pdfBtn)),
+        h('p', { class: 'muted fine-print' }, t('ocr.pdfHint'))));
     }
     appendResult(root, st, ctx);
   },
@@ -301,14 +306,17 @@ async function runOcr(st, ctx, bar) {
   }
   try {
     const parts = [];
+    const pages = [];
     for (let i = 0; i < total; i++) {
       current = i;
       bar.busy(t('ocr.progress', { i: i + 1, n: total }), i / total);
       const canvas = await sources[i]();
-      const { data } = await worker.recognize(canvas);
+      const { data } = await worker.recognize(canvas, {}, { text: true, blocks: true });
+      pages.push({ index: i, canvasW: canvas.width, canvasH: canvas.height, lines: linesFromOcr(data), file: st.pdf ? null : st.images[i].file });
       canvas.width = 0;
       parts.push(cleanOcrText(data && data.text));
     }
+    st.ocrPages = pages;
     st.text = parts.map((p, i) => (i > 0 ? `--- ${i + 1} ---\n${p}` : p)).join('\n\n');
   } catch (e) {
     st.error = userMessage(e);
@@ -321,12 +329,24 @@ async function runOcr(st, ctx, bar) {
 async function saveOcr(st, ctx, format) {
   const startedAt = performance.now();
   const base = baseName(st.pdf ? st.pdf.name : (st.images[0] && st.images[0].name) || 'ocr');
-  const pages = paragraphsFromPlainText(st.text, { keepLines: st.keepLines });
-  const blob = format === 'txt'
-    ? new Blob(['\uFEFF' + st.text.replace(/^\s*[-—–]{2,}\s*[\d٠-٩]+\s*[-—–]{2,}\s*$/gm, '').replace(/\n{3,}/g, '\n\n') + '\n'], { type: 'text/plain' })
-    : await buildDocx(pages, { arabicFont: st.font, title: base });
+  let blob;
+  try {
+    if (format === 'pdf') {
+      blob = await buildSearchablePdf({ pdfEntry: st.pdf, ocrPages: st.ocrPages });
+    } else if (format === 'txt') {
+      blob = new Blob(['\uFEFF' + st.text.replace(/^\s*[-—–]{2,}\s*[\d٠-٩]+\s*[-—–]{2,}\s*$/gm, '').replace(/\n{3,}/g, '\n\n') + '\n'], { type: 'text/plain' });
+    } else {
+      const pages = paragraphsFromPlainText(st.text, { keepLines: st.keepLines });
+      blob = await buildDocx(pages, { arabicFont: st.font, title: base });
+    }
+  } catch (e) {
+    st.error = userMessage(e);
+    ctx.refresh();
+    return;
+  }
+  const ext = format === 'pdf' ? 'pdf' : format === 'txt' ? 'txt' : 'docx';
   await deliver(st, ctx, {
-    files: [{ name: `${base}-ocr.${format === 'txt' ? 'txt' : 'docx'}`, blob }],
+    files: [{ name: `${base}-ocr.${ext}`, blob }],
     startedAt, detail: formatBytes(blob.size),
   });
 }

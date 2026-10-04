@@ -14,6 +14,7 @@ const PRECACHE = [
   "./js/i18n.js",
   "./js/pdfjs.js",
   "./js/pro.js",
+  "./js/searchable.js",
   "./js/tools-arabic.js",
   "./js/tools-pdf.js",
   "./js/ui.js",

@@ -68,7 +68,7 @@ function canvasToBlob(canvas, type, quality) {
 }
 
 /** Visible page box of a pdf-lib page, accounting for /Rotate and the crop box. */
-function visualBox(page) {
+export function visualBox(page) {
   const crop = page.getCropBox();
   const rot = (((page.getRotation().angle || 0) % 360) + 360) % 360;
   const W = crop.width;
@@ -599,7 +599,7 @@ function jpegOrientation(b) {
   return 1;
 }
 
-async function prepareImage(file) {
+export async function prepareImage(file) {
   const bytes = await readBytes(file);
   const isJpeg = bytes[0] === 0xFF && bytes[1] === 0xD8;
   const isPng = bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47;
