@@ -1,0 +1,23 @@
+Awraq PDF – third-party software notices
+
+This application bundles the following open-source libraries. Each is used
+under its own licence; the full licence texts are in this folder.
+
+pdf.js 5.6.205 (pdf.min.mjs, pdf.worker.min.mjs, cmaps, standard_fonts, wasm, iccs)
+  Copyright Mozilla Foundation. Licensed under the Apache License 2.0.
+  https://github.com/mozilla/pdf.js  —  see pdfjs-LICENSE.txt
+  The wasm folder also contains OpenJPEG, JBIG2 and qcms components; their
+  licences are the LICENSE_* files inside lib/pdfjs/wasm.
+
+pdf-lib 1.17.1 (pdf-lib.min.js)
+  Copyright Andrew Dillon. Licensed under the MIT License.
+  https://github.com/Hopding/pdf-lib  —  see pdf-lib-LICENSE.txt
+
+JSZip 3.10.1 (jszip.min.js)
+  Copyright Stuart Knightley and contributors. Dual-licensed under the MIT
+  License or GPLv3; Awraq PDF uses it under the MIT License.
+  https://github.com/Stuk/jszip  —  see jszip-LICENSE.txt
+
+Tesseract.js 5.1.1 (loaded on demand from cdn.jsdelivr.net for the OCR tool)
+  Licensed under the Apache License 2.0. https://github.com/naptha/tesseract.js
+  Language data (tessdata) is licensed under the Apache License 2.0.
