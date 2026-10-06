@@ -1,5 +1,5 @@
 // Awraq PDF — service worker: precaches the whole app so it runs offline.
-const VERSION = 'awraq-1.0.0';
+const VERSION = 'awraq-1.2.0';
 const CDN_CACHE = 'awraq-cdn';
 const PRECACHE = [
   "./",
