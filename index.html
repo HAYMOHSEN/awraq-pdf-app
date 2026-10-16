@@ -1,28 +1,266 @@
 <!doctype html>
 <html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Awraq PDF</title>
-  <meta name="description" content="Merge, split, compress and convert PDFs on your PC — with Arabic done right. Files never leave your device.">
-  <meta name="theme-color" content="#16213D">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon-192.png" type="image/png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css">
-  <script src="lib/pdf-lib.min.js" defer></script>
-  <script src="lib/jszip.min.js" defer></script>
-  <script type="module" src="js/app.js"></script>
-</head>
-<body>
-  <div id="app">
-    <header id="topbar" class="topbar"></header>
-    <nav id="sidebar" class="sidebar" aria-label="Tools"></nav>
-    <main id="main" tabindex="-1"></main>
-  </div>
-  <div id="toast" role="status" aria-live="polite"></div>
-  <dialog id="dlg-pro" aria-labelledby="pro-title"></dialog>
-  <dialog id="dlg-about"></dialog>
-  <noscript><p style="padding:24px;font-family:Segoe UI,Tahoma,sans-serif">Awraq PDF needs JavaScript to run.</p></noscript>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#10243d" />
+    <meta name="description" content="Awraq AI Pro is a private Arabic and English PDF workspace with page-proof search, smart document actions, and local PDF tools." />
+    <meta name="application-name" content="Awraq AI Pro" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/awraq-mark.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>Awraq AI Pro — PDF-to-Action Workspace</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Application navigation">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" role="img"><path d="M12 5h18l8 8v28a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" fill="currentColor" opacity=".17"/><path d="M30 5v9h8M16 21h16M16 27h16M16 33h10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="m31 32 3 3 6-7" fill="none" stroke="#76e7c4" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+          </div>
+          <div>
+            <strong>Awraq <span>AI Pro</span></strong>
+            <small data-i18n="brandSubtitle">PDF-to-Action Workspace</small>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Sections">
+          <button class="nav-item active" data-view-target="workspace" type="button">
+            <span class="nav-icon">⌂</span><span data-i18n="navWorkspace">Workspace</span>
+          </button>
+          <button class="nav-item" data-view-target="inspector" type="button">
+            <span class="nav-icon">⌕</span><span data-i18n="navInspector">Proof Inspector</span>
+          </button>
+          <button class="nav-item" data-view-target="packs" type="button">
+            <span class="nav-icon">✦</span><span data-i18n="navPacks">Action Packs</span>
+          </button>
+          <button class="nav-item" data-view-target="toolkit" type="button">
+            <span class="nav-icon">▣</span><span data-i18n="navToolkit">PDF Toolkit</span>
+          </button>
+          <button class="nav-item" data-view-target="history" type="button">
+            <span class="nav-icon">◷</span><span data-i18n="navHistory">Private History</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="private-card">
+            <span class="shield">✓</span>
+            <div>
+              <strong data-i18n="localOnly">Local by default</strong>
+              <small data-i18n="localOnlyDetail">Your PDF never leaves this device.</small>
+            </div>
+          </div>
+          <button id="language-toggle" class="language-toggle" type="button" aria-label="Switch language">العربية</button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" data-i18n="eyebrow">TRUSTED DOCUMENT INTELLIGENCE</p>
+            <h1 id="view-title" data-i18n="workspaceTitle">Your PDFs, ready for action.</h1>
+          </div>
+          <div class="topbar-actions">
+            <span class="local-status"><span class="status-dot"></span><span data-i18n="onDevice">On-device processing</span></span>
+            <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle color theme" title="Toggle color theme">◐</button>
+          </div>
+        </header>
+
+        <section id="workspace" class="view active" aria-labelledby="view-title">
+          <div class="hero-grid">
+            <article class="hero-copy">
+              <div class="pill"><span>✦</span><span data-i18n="heroPill">Every answer has page proof</span></div>
+              <h2 data-i18n="heroTitle">Understand, verify, and act on every PDF.</h2>
+              <p data-i18n="heroBody">Open an Arabic or English document, find verified evidence, detect sensitive details, and turn it into useful work—without uploading it.</p>
+              <div class="hero-actions">
+                <button id="hero-open-button" class="button primary" type="button"><span>＋</span><span data-i18n="openPdf">Open a PDF</span></button>
+                <button class="button secondary" type="button" data-view-target="packs"><span>✦</span><span data-i18n="explorePacks">Explore action packs</span></button>
+              </div>
+              <div class="trust-line"><span>✓</span><span data-i18n="trustLine">No cloud account. No document upload. No hidden AI claims.</span></div>
+            </article>
+
+            <article class="proof-preview" aria-label="Proof workflow preview">
+              <div class="preview-top"><span class="mini-logo">A</span><span data-i18n="previewDocument">Official_Document.pdf</span><span class="preview-lock">⌁</span></div>
+              <div class="preview-text-lines" aria-hidden="true">
+                <span></span><span></span><span class="highlight-line"></span><span></span><span></span><span></span>
+              </div>
+              <div class="evidence-card">
+                <span class="evidence-label" data-i18n="verifiedEvidence">VERIFIED EVIDENCE</span>
+                <strong data-i18n="previewEvidence">“Deadline: 15 October 2026”</strong>
+                <button class="citation-chip" type="button" data-i18n="pageProof">Page 3 · show proof</button>
+              </div>
+            </article>
+          </div>
+
+          <div class="workspace-grid">
+            <section class="upload-card card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow" data-i18n="startHere">START HERE</p>
+                  <h3 data-i18n="uploadTitle">Add a document</h3>
+                </div>
+                <span class="file-types">PDF</span>
+              </div>
+              <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="Open a PDF document">
+                <input id="primary-file-input" type="file" accept="application/pdf,.pdf" hidden />
+                <div class="upload-orb" aria-hidden="true">↥</div>
+                <strong data-i18n="dropTitle">Drop a PDF here</strong>
+                <span data-i18n="dropDetail">or choose a file from your computer</span>
+                <button id="open-pdf-button" type="button" class="text-button" data-i18n="browseFiles">Browse files</button>
+              </div>
+              <div class="upload-footnote"><span>⌁</span><span data-i18n="uploadFootnote">Files are processed in this browser and are not uploaded.</span></div>
+            </section>
+
+            <section class="document-card card" id="document-card">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow" data-i18n="currentDocument">CURRENT DOCUMENT</p>
+                  <h3 id="document-name" data-i18n="noDocument">No document open</h3>
+                </div>
+                <span id="document-status" class="soft-status" data-i18n="readyStatus">Ready</span>
+              </div>
+              <div class="document-placeholder" id="document-placeholder">
+                <span class="placeholder-file">⌑</span>
+                <p data-i18n="documentPlaceholder">Open a PDF to reveal pages, proof search, privacy checks, and action packs.</p>
+              </div>
+              <div id="document-meta" class="document-meta hidden">
+                <div><span data-i18n="pages">Pages</span><strong id="page-count">—</strong></div>
+                <div><span data-i18n="words">Words</span><strong id="word-count">—</strong></div>
+                <div><span data-i18n="privacySignals">Privacy signals</span><strong id="signal-count">—</strong></div>
+              </div>
+            </section>
+          </div>
+
+          <section class="proof-search card" id="proof-search-card">
+            <div class="section-heading search-heading">
+              <div>
+                <p class="eyebrow" data-i18n="proofEngine">LOCAL PROOF ENGINE</p>
+                <h3 data-i18n="askVerified">Ask for verified evidence</h3>
+              </div>
+              <span class="proof-badge"><span>✓</span><span data-i18n="citationsRequired">Page citations required</span></span>
+            </div>
+            <form id="proof-form" class="proof-form">
+              <input id="proof-query" autocomplete="off" type="search" data-i18n-placeholder="proofPlaceholder" placeholder="Search the document and verify the exact pages…" />
+              <button class="button primary" type="submit"><span>⌕</span><span data-i18n="verify">Verify</span></button>
+            </form>
+            <div id="proof-results" class="proof-results" aria-live="polite">
+              <div class="proof-empty"><span class="proof-empty-icon">✓</span><p data-i18n="proofEmpty">Your answers will appear here with the exact pages that support them.</p></div>
+            </div>
+          </section>
+        </section>
+
+        <section id="inspector" class="view" aria-label="Proof Inspector">
+          <div class="view-intro">
+            <div>
+              <p class="eyebrow" data-i18n="inspectorEyebrow">SOURCE-FIRST REVIEW</p>
+              <h2 data-i18n="inspectorTitle">Proof Inspector</h2>
+              <p data-i18n="inspectorBody">See the document page, its extracted text, and the evidence that supports every finding.</p>
+            </div>
+            <button id="inspect-current-button" class="button secondary" type="button"><span>⌕</span><span data-i18n="openDocument">Open document</span></button>
+          </div>
+          <div class="inspector-grid">
+            <section class="pdf-stage card">
+              <div class="pdf-toolbar">
+                <button id="previous-page" class="icon-button" type="button" aria-label="Previous page">‹</button>
+                <span id="page-indicator" data-i18n="pageIndicatorEmpty">Page — of —</span>
+                <button id="next-page" class="icon-button" type="button" aria-label="Next page">›</button>
+                <button id="zoom-out" class="icon-button compact" type="button" aria-label="Zoom out">−</button>
+                <button id="zoom-in" class="icon-button compact" type="button" aria-label="Zoom in">＋</button>
+              </div>
+              <div class="canvas-wrap"><canvas id="pdf-canvas" aria-label="PDF page preview"></canvas><div id="canvas-empty" class="canvas-empty"><span>⌑</span><p data-i18n="canvasEmpty">Your document preview will appear here.</p></div></div>
+            </section>
+            <aside class="inspector-side">
+              <section class="card source-text-card">
+                <div class="section-heading small-heading"><h3 data-i18n="pageText">Page text</h3><span id="page-text-label" class="file-types">—</span></div>
+                <p id="page-text" class="page-text" data-i18n="pageTextEmpty">Select a document to inspect its extracted text.</p>
+              </section>
+              <section class="card signals-card">
+                <div class="section-heading small-heading"><h3 data-i18n="privacyCheck">Privacy check</h3><button id="run-privacy-check" class="text-button" type="button" data-i18n="scan">Scan</button></div>
+                <div id="sensitive-results" class="sensitive-results"><p data-i18n="privacyEmpty">No document has been scanned yet.</p></div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section id="packs" class="view" aria-label="Action Packs">
+          <div class="view-intro">
+            <div>
+              <p class="eyebrow" data-i18n="packsEyebrow">READY-MADE WORKFLOWS</p>
+              <h2 data-i18n="packsTitle">Turn a PDF into useful work.</h2>
+              <p data-i18n="packsBody">Each pack works from your open document and produces local, reviewable output.</p>
+            </div>
+            <span class="local-status"><span class="status-dot"></span><span data-i18n="noUpload">No upload required</span></span>
+          </div>
+          <div class="packs-grid">
+            <article class="pack-card study"><span class="pack-icon">▤</span><h3 data-i18n="studyPack">Study Pack</h3><p data-i18n="studyPackBody">Create evidence-based revision prompts and key points from lecture notes.</p><ul><li data-i18n="studyPackOne">Page-linked study prompts</li><li data-i18n="studyPackTwo">Arabic and English ready</li></ul><button class="button secondary run-pack" data-pack="study" type="button"><span>✦</span><span data-i18n="createStudyPack">Create Study Pack</span></button></article>
+            <article class="pack-card office"><span class="pack-icon">▥</span><h3 data-i18n="officePack">Office Pack</h3><p data-i18n="officePackBody">Extract dates, contact details, and document signals into a reviewable CSV.</p><ul><li data-i18n="officePackOne">Dates and contacts by page</li><li data-i18n="officePackTwo">Ready for Excel</li></ul><button class="button secondary run-pack" data-pack="office" type="button"><span>✦</span><span data-i18n="createOfficePack">Create Office Pack</span></button></article>
+            <article class="pack-card research"><span class="pack-icon">⌘</span><h3 data-i18n="researchPack">Research Pack</h3><p data-i18n="researchPackBody">Export selected evidence passages with page citations for notes and writing.</p><ul><li data-i18n="researchPackOne">Quote and page traceability</li><li data-i18n="researchPackTwo">Markdown export</li></ul><button class="button secondary run-pack" data-pack="research" type="button"><span>✦</span><span data-i18n="createResearchPack">Create Research Pack</span></button></article>
+            <article class="pack-card privacy"><span class="pack-icon">◈</span><h3 data-i18n="privacyPack">Privacy Pack</h3><p data-i18n="privacyPackBody">Find possible sensitive data before you share a document with someone else.</p><ul><li data-i18n="privacyPackOne">Email, phone, ID, and card patterns</li><li data-i18n="privacyPackTwo">Evidence report for review</li></ul><button class="button secondary run-pack" data-pack="privacy" type="button"><span>✦</span><span data-i18n="runPrivacyPack">Run Privacy Pack</span></button></article>
+          </div>
+          <section id="pack-output" class="pack-output card hidden" aria-live="polite"></section>
+        </section>
+
+        <section id="toolkit" class="view" aria-label="PDF Toolkit">
+          <div class="view-intro">
+            <div>
+              <p class="eyebrow" data-i18n="toolkitEyebrow">ON-DEVICE PDF TOOLS</p>
+              <h2 data-i18n="toolkitTitle">The tools people expect—without sending files away.</h2>
+              <p data-i18n="toolkitBody">Use the original Awraq essentials alongside the new verified workspace.</p>
+            </div>
+          </div>
+          <div class="toolkit-grid">
+            <article class="tool-card card wide-tool">
+              <div class="tool-card-head"><span class="tool-icon">⊞</span><div><h3 data-i18n="mergeTitle">Merge PDFs</h3><p data-i18n="mergeBody">Combine multiple files in your chosen order.</p></div></div>
+              <input id="merge-files" class="file-input" type="file" accept="application/pdf,.pdf" multiple />
+              <button id="merge-button" class="button primary" type="button" data-i18n="mergeButton">Merge selected PDFs</button>
+            </article>
+            <article class="tool-card card">
+              <div class="tool-card-head"><span class="tool-icon">✂</span><div><h3 data-i18n="extractTitle">Extract or split pages</h3><p data-i18n="extractBody">Create a new PDF from a page range.</p></div></div>
+              <label class="field-label" for="page-range" data-i18n="pageRange">Page range</label>
+              <input id="page-range" class="field-input" placeholder="1-3, 5" inputmode="text" />
+              <button id="extract-button" class="button secondary" type="button" data-i18n="extractButton">Extract pages</button>
+            </article>
+            <article class="tool-card card">
+              <div class="tool-card-head"><span class="tool-icon">♢</span><div><h3 data-i18n="watermarkTitle">Add watermark</h3><p data-i18n="watermarkBody">Apply a visible draft, owner, or confidentiality mark.</p></div></div>
+              <label class="field-label" for="watermark-text" data-i18n="watermarkText">Watermark text</label>
+              <input id="watermark-text" class="field-input" value="CONFIDENTIAL" />
+              <button id="watermark-button" class="button secondary" type="button" data-i18n="watermarkButton">Add watermark</button>
+            </article>
+            <article class="tool-card card">
+              <div class="tool-card-head"><span class="tool-icon">#</span><div><h3 data-i18n="pageNumbersTitle">Add page numbers</h3><p data-i18n="pageNumbersBody">Place clean numbers on every page.</p></div></div>
+              <label class="field-label" for="page-number-prefix" data-i18n="pageNumberPrefix">Prefix (optional)</label>
+              <input id="page-number-prefix" class="field-input" placeholder="Page" />
+              <button id="page-numbers-button" class="button secondary" type="button" data-i18n="pageNumbersButton">Add page numbers</button>
+            </article>
+            <article class="tool-card card">
+              <div class="tool-card-head"><span class="tool-icon">⇣</span><div><h3 data-i18n="optimizeTitle">Optimize PDF</h3><p data-i18n="optimizeBody">Safely re-save the file using compact PDF objects.</p></div></div>
+              <p class="tool-hint" data-i18n="optimizeHint">Results depend on the original file; images are not degraded.</p>
+              <button id="optimize-button" class="button secondary" type="button" data-i18n="optimizeButton">Optimize current PDF</button>
+            </article>
+            <article class="tool-card card accent-tool">
+              <div class="tool-card-head"><span class="tool-icon">✓</span><div><h3 data-i18n="proofBeforeShare">Proof before sharing</h3><p data-i18n="proofBeforeShareBody">Run a privacy scan and export a review report first.</p></div></div>
+              <button class="button primary run-pack" data-pack="privacy" type="button"><span>◈</span><span data-i18n="runPrivacyCheck">Run privacy check</span></button>
+            </article>
+          </div>
+        </section>
+
+        <section id="history" class="view" aria-label="Private History">
+          <div class="view-intro">
+            <div>
+              <p class="eyebrow" data-i18n="historyEyebrow">YOUR DEVICE ONLY</p>
+              <h2 data-i18n="historyTitle">Private activity history</h2>
+              <p data-i18n="historyBody">Awraq keeps only action names and file names on this device—not copies of your PDFs.</p>
+            </div>
+            <button id="clear-history" class="button secondary danger" type="button"><span>⌫</span><span data-i18n="clearHistory">Clear history</span></button>
+          </div>
+          <div id="history-list" class="history-list card"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./vendor/pdf-lib.min.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
 </html>

@@ -1,0 +1,10 @@
+{
+  "name": "awraq-ai-pro",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Arabic and English local-first PDF-to-Action workspace for Microsoft Store PWA packaging.",
+  "scripts": {
+    "start": "python3 -m http.server 4173",
+    "check": "node --check app.js"
+  }
+}

@@ -1,19 +1,38 @@
-# Awraq PDF — fix for the shared app identity
+# Awraq AI Pro v2.0
 
-Repository: **HAYMOHSEN/awraq-pdf-app** — app URL: https://haymohsen.github.io/awraq-pdf-app/
+Awraq AI Pro is a polished, local-first Arabic and English PDF workspace designed as an upgrade for the existing Awraq PDF Microsoft Store app.
 
-## What changed (nothing else in the repository changes)
+## What is included
 
-- `manifest.webmanifest`: `"id": "./"` → `"id": "/awraq-pdf-app/"`
-  (identity was `https://haymohsen.github.io/`, shared with your other apps; it is now `https://haymohsen.github.io/awraq-pdf-app/`)
-- `sw.js`: `const VERSION = 'awraq-1.0.0';` → `const VERSION = 'awraq-1.2.0';`
+- Verified local proof search: a result always links to the PDF page that contains its supporting text.
+- Proof Inspector: PDF page preview, extracted page text, and privacy signals in one place.
+- Privacy scan: flags possible email addresses, phone numbers, card-like numbers, identity-like numbers, and passport-like values for human review.
+- Action Packs: create local Study, Office, Research, and Privacy outputs.
+- PDF Toolkit: merge, extract page ranges, add a watermark, add page numbers, and safely optimize a PDF.
+- Arabic and English interface with RTL support.
+- Local-first design: the browser processes selected PDFs; this release does not upload PDF contents to an AI service.
+- Offline app shell: PDF libraries and the interface are included in the package and cached after installation.
 
-The cache-version bump makes Edge fetch the new manifest instead of the copy it cached; users see no difference apart from a quick re-download of the app files on their next launch.
+## Run locally
 
-## Steps
+Open this folder in a terminal and run:
 
-1. On GitHub open the repository → **Add file → Upload files** → drop the file(s) from this folder (they overwrite the old ones with the same names) → **Commit changes**. You can instead open each file, click the pencil icon and paste the new content.
-2. Wait about a minute, then open https://haymohsen.github.io/awraq-pdf-app/manifest.webmanifest in a browser and check that it shows `"id": "/awraq-pdf-app/"`.
-3. Go to pwabuilder.com → enter `https://haymohsen.github.io/awraq-pdf-app/` → **Package for stores → Windows**. Use the same Package ID, Publisher ID and Publisher display name as the previous package and the app name exactly as reserved in Partner Center. Expand the full settings (the "Classic app version" field is hidden by default) and type **App version `1.2.0`** and **Classic app version `1.1.9`** — both higher than the first submission's packages, with the classic number below the app version. Generate and download the package.
-4. Partner Center → this app → **Update** (new submission) → **Packages** → upload both the `.msixbundle` and the `.classic.appxbundle` → Submit. Listing, price and trial stay as they are. If Partner Center reports a package "with the same full name", a version number was left at its default — regenerate with the numbers above and replace the uploaded packages.
-5. On your own PC uninstall the old copy (Settings → Apps, and `edge://apps`) before installing the updated one to test. Customers keep their data — it is stored per website, not per app identity.
+python3 -m http.server 4173
+
+Then visit http://localhost:4173 in a desktop browser. Do not open index.html directly from the file system: service-worker and module features require HTTP or HTTPS.
+
+## Publish the web app
+
+1. Upload the contents of this folder to the existing Awraq PDF web-app repository.
+2. Keep the existing repository configuration that controls its public HTTPS URL, such as a CNAME file or GitHub Pages configuration.
+3. Publish the updated repository and verify the live site before packaging it for the Store.
+4. Follow release/STORE_UPDATE_STEPS.md to issue a Microsoft Store update under the existing Awraq PDF listing.
+
+## Important product truth
+
+This version deliberately does not pretend that a cloud chatbot is local AI. Its proof search, document text extraction, privacy checks, and output packs are local and evidence-linked. A later paid AI edition can add optional cloud generation only after its privacy notice, consent flow, usage limits, and operating cost are defined.
+
+## Version
+
+2.0.0
+
